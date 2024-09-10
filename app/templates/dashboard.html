@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        :root {
+            --rich-black: #00171F;
+            --prussian-blue: #003459;
+            --non-photo-blue: #ADEBFF;
+            --white: #FFFFFF;
+        }
+
+        body {
+            background-color: var(--rich-black);
+            color: var(--white);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: var(--non-photo-blue);
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .mood-tracker {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+        }
+
+        .mood-tracker div {
+            text-align: center;
+        }
+
+        .mood-tracker div span {
+            display: block;
+            font-size: 24px;
+        }
+
+        .add-entry {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+        }
+
+        .add-entry button {
+            background-color: var(--non-photo-blue);
+            border: none;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            font-size: 36px;
+            color: var(--prussian-blue);
+            cursor: pointer;
+        }
+
+        .navigation-bar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: var(--prussian-blue);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+        }
+
+        .navigation-bar a {
+            color: var(--non-photo-blue);
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .navigation-bar a span {
+            display: block;
+            margin-top: 5px;
+        }
+
+        .navigation-bar a img {
+            width: 24px;
+            height: 24px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>May 2024</h1>
+
+    <div class="mood-tracker">
+        <div>
+            <span>😄</span>
+            <span>rad</span>
+        </div>
+        <div>
+            <span>🙂</span>
+            <span>good</span>
+        </div>
+        <div>
+            <span>😐</span>
+            <span>meh</span>
+        </div>
+        <div>
+            <span>😟</span>
+            <span>bad</span>
+        </div>
+        <div>
+            <span>😢</span>
+            <span>awful</span>
+        </div>
+    </div>
+
+    <div class="add-entry">
+        <button>+</button>
+    </div>
+
+    <div class="navigation-bar">
+        <a href="#">
+            <img src="/static/images/entries-icon.png" alt="Entries">
+            <span>Entries</span>
+        </a>
+        <a href="#">
+            <img src="/static/images/stats-icon.png" alt="Stats">
+            <span>Stats</span>
+        </a>
+        <a href="#">
+            <img src="/static/images/add-icon.png" alt="Add">
+            <span>+</span>
+        </a>
+        <a href="#">
+            <img src="/static/images/calendar-icon.png" alt="Calendar">
+            <span>Calendar</span>
+        </a>
+        <a href="#">
+            <img src="/static/images/more-icon.png" alt="More">
+            <span>More</span>
+        </a>
+    </div>
+
+</body>
+</html>

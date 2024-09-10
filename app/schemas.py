@@ -14,6 +14,7 @@ class JournalCreate(JournalBase):
 class UserOut(BaseModel):
     id: int
     email: EmailStr
+    username: str
     created_at: datetime
 
     class Config:
@@ -53,6 +54,7 @@ class Mood(MoodBase):
 
 class UserCreate(BaseModel):
     email: EmailStr
+    username: str
     password: str
 
 
