@@ -5,140 +5,305 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <style>
-        :root {
-            --rich-black: #00171F;
-            --prussian-blue: #003459;
-            --non-photo-blue: #ADEBFF;
-            --white: #FFFFFF;
-        }
-
         body {
-            background-color: var(--rich-black);
-            color: var(--white);
+            background-color: #00171F; /* Rich Black */
+            color: #ADEBFF; /* Non-Photo Blue */
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
         }
 
-        h1 {
-            color: var(--non-photo-blue);
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #003459; /* Prussian Blue */
+        }
+
+        .header img {
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+        }
+
+        .header .date-container {
+            flex: 1;
             text-align: center;
-            padding: 20px 0;
+        }
+
+        .header p {
+            font-size: 1rem;
+            margin: 0;
+            color: #ADEBFF; /* Non-Photo Blue */
         }
 
         .mood-tracker {
             display: flex;
             justify-content: space-around;
-            padding: 20px;
+            padding: 10px;
+            background-color: #003459; /* Prussian Blue */
+            border-radius: 10px;
+            margin: 20px auto; /* Center horizontally */
+            max-width: 800px; /* Optional: Match container width */
         }
 
         .mood-tracker div {
             text-align: center;
         }
 
-        .mood-tracker div span {
-            display: block;
-            font-size: 24px;
+        .mood-tracker img {
+            width: 50px;
+            height: 50px;
+            transition: transform 0.3s ease;
         }
 
-        .add-entry {
+        .mood-tracker img:hover {
+            transform: scale(1.2);
+        }
+
+        .mood-tracker span {
+            display: block;
+            margin-top: 5px;
+            color: #ADEBFF; /* Non-Photo Blue */
+        }
+
+        .prompt {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 20px;
+        }
+
+        .illustration {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .illustration img {
+            max-width: 100%; /* Adjust to fit the container */
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .plus-button {
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 300px;
+            margin-top: 20px;
         }
 
-        .add-entry button {
-            background-color: var(--non-photo-blue);
-            border: none;
-            border-radius: 50%;
-            width: 80px;
-            height: 80px;
-            font-size: 36px;
-            color: var(--prussian-blue);
+        .plus-button img {
+            width: 60px;
+            height: 60px;
             cursor: pointer;
         }
 
-        .navigation-bar {
+        .navbar {
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: var(--prussian-blue);
             display: flex;
             justify-content: space-around;
-            padding: 15px 0;
+            background-color: #ADEBFF; /* Non-Photo Blue */
+            padding: 10px 0;
         }
 
-        .navigation-bar a {
-            color: var(--non-photo-blue);
-            text-decoration: none;
+        .navbar div {
             text-align: center;
         }
 
-        .navigation-bar a span {
-            display: block;
-            margin-top: 5px;
+        .navbar img {
+            width: 30px;
+            height: 30px;
         }
 
-        .navigation-bar a img {
-            width: 24px;
-            height: 24px;
+        .navbar span {
+            display: block;
+            margin-top: 5px;
+            font-size: 12px;
+            color: #003459; /* Prussian Blue */
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .logout-link img {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
+
+        .logout-link span {
+            font-size: 16px;
+        }
+
+        .logout-link:hover {
+            background-color: #FF4D4D; /* Red color for logout on hover */
+            color: #FFFFFF; /* White text color */
+        }
+
+        @media (max-width: 768px) {
+            .mood-tracker img,
+            .plus-button img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .navbar img {
+                width: 25px;
+                height: 25px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Header with Logo and Date -->
+    <div class="header">
+        <img src="/static/images/logo.png" alt="App Logo">
+        <div class="date-container">
+            <p id="current-date">May 2024</p>
+        </div>
+    </div>
 
-    <h1>May 2024</h1>
-
+    <!-- Mood Tracker Section -->
     <div class="mood-tracker">
         <div>
-            <span>😄</span>
-            <span>rad</span>
+            <a href="/moods?mood=rad"><img src="/static/images/emoji-rad.png" alt="rad emoji"></a>
+            <span>Rad</span>
         </div>
         <div>
-            <span>🙂</span>
-            <span>good</span>
+            <a href="/moods?mood=good"><img src="/static/images/emoji-good.png" alt="good emoji"></a>
+            <span>Good</span>
         </div>
         <div>
-            <span>😐</span>
-            <span>meh</span>
+            <a href="/moods?mood=meh"><img src="/static/images/emoji-meh.png" alt="meh emoji"></a>
+            <span>Meh</span>
         </div>
         <div>
-            <span>😟</span>
-            <span>bad</span>
+            <a href="/moods?mood=bad"><img src="/static/images/emoji-bad.png" alt="bad emoji"></a>
+            <span>Bad</span>
         </div>
         <div>
-            <span>😢</span>
-            <span>awful</span>
+            <a href="/moods?mood=awful"><img src="/static/images/emoji-awful.png" alt="awful emoji"></a>
+            <span>Awful</span>
         </div>
     </div>
 
-    <div class="add-entry">
-        <button>+</button>
+    <!-- Prompt and Illustration -->
+    <div class="prompt">
+        Have you journaled today ? <br>
+        Tap the big PLUS button.
     </div>
 
-    <div class="navigation-bar">
-        <a href="#">
-            <img src="/static/images/entries-icon.png" alt="Entries">
-            <span>Entries</span>
+    <!-- <div class="plus-button">
+        <a href="/journals"><img src="/static/images/add-icon.png" alt="plus button"></a>
+    </div> -->
+
+    <div class="illustration">
+        <img src="/static/images/sitting.png" alt="Illustration">
+    </div>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <a href="/entries">
+            <div>
+                <img src="/static/images/entries_icon.png" alt="Entries">
+                <span>Entries</span>
+            </div>
         </a>
-        <a href="#">
-            <img src="/static/images/stats-icon.png" alt="Stats">
-            <span>Stats</span>
+        <a href="/stats">
+            <div>
+                <img src="/static/images/stats_icon.png" alt="Stats">
+                <span>Stats</span>
+            </div>
         </a>
-        <a href="#">
-            <img src="/static/images/add-icon.png" alt="Add">
-            <span>+</span>
+        <a href="/journals">
+            <div>
+                <img src="/static/images/add_icon.png" alt="Journal">
+                <span>Add</span>
+            </div>
         </a>
-        <a href="#">
-            <img src="/static/images/calendar-icon.png" alt="Calendar">
-            <span>Calendar</span>
+        <a href="/calendar">
+            <div>
+                <img src="/static/images/calendar_icon.png" alt="Calendar">
+                <span>Calendar</span>
+            </div>
         </a>
-        <a href="#">
-            <img src="/static/images/more-icon.png" alt="More">
-            <span>More</span>
+        <a href="#" class="logout-link" onclick="logoutUser(event)">
+            <div>
+                <img src="/static/images/logout_icon.png" alt="logout">
+                <span>Logout</span>
+            </div>
         </a>
     </div>
 
+    <!-- JavaScript for dynamic date and time -->
+    <script>
+        function updateDateTime() {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const date = now.toLocaleDateString(undefined, options);
+            document.getElementById('current-date').innerText = date;
+        }
+
+        function logoutUser(event) {
+            event.preventDefault(); // Prevent default anchor behavior
+            localStorage.removeItem('access_token'); // Remove token from local storage
+            window.location.href = '/login'; // Redirect to login page
+        }
+
+        async function checkTokenValidity() {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                window.location.href = '/login';
+                return;
+            }
+
+            try {
+                const response = await fetch('/verify-token', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.status === 401) {
+                    localStorage.removeItem('access_token'); // Remove token from local storage
+                    window.location.href = '/login'; // Redirect to login page
+                }
+            } catch (error) {
+                console.error('Error checking token validity:', error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDateTime();
+            checkTokenValidity(); // Check token validity when the page loads
+        });
+    </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+

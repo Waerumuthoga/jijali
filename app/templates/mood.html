@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mood tracking and reflection application">
+    <title>Moods</title>
+    <style>
+        body {
+            background-color: #00171F;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #003459;
+        }
+
+        .header img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .mood-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .mood-container h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .mood-container p {
+            color: #ADEBFF;
+            font-size: 1rem;
+        }
+
+        .mood-selection {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .mood-emoji {
+            margin: 10px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .mood-emoji:hover {
+            transform: scale(1.1);
+        }
+
+        .mood-emoji img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .reflection-form {
+            background-color: #003459;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            margin: 20px auto;
+            display: none; /* Initially hidden */
+        }
+
+        .form-section {
+            margin-bottom: 15px;
+        }
+
+        .form-section label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-section textarea, 
+        .form-section select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ADEBFF;
+            background-color: #00171F;
+            color: white;
+        }
+
+        .submit-btn {
+            background-color: #ADEBFF;
+            color: #003459;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #0099FF;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #003459;
+            color: #ADEBFF;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 10px 20px;
+            color: #ADEBFF;
+            background-color: #003459;
+            border: 1px solid #ADEBFF;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #ADEBFF;
+            color: #003459;
+        }
+
+        @media (max-width: 768px) {
+            .mood-emoji img {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with Logo -->
+    <div class="header">
+        <img src="/static/images/logo.png" alt="Mood Tracker Logo">
+    </div>
+
+    <!-- Back to Dashboard Link -->
+    <a href="/dashboard" class="back-button">Back to Dashboard</a>
+
+    <!-- Mood Selection Section -->
+    <div class="mood-container">
+        <h1>How are you feeling?</h1>
+        <p id="current-time" aria-live="polite"></p>
+
+        <!-- Mood Emoji Selection -->
+        <div class="mood-selection">
+            <div class="mood-emoji" data-mood="rad" role="button" aria-label="Feeling rad">
+                <img src="/static/images/emoji-rad.png" alt="Emoji representing feeling rad">
+                <p>rad</p>
+            </div>
+            <div class="mood-emoji" data-mood="good" role="button" aria-label="Feeling good">
+                <img src="/static/images/emoji-good.png" alt="Emoji representing feeling good">
+                <p>good</p>
+            </div>
+            <div class="mood-emoji" data-mood="meh" role="button" aria-label="Feeling meh">
+                <img src="/static/images/emoji-meh.png" alt="Emoji representing feeling meh">
+                <p>meh</p>
+            </div>
+            <div class="mood-emoji" data-mood="bad" role="button" aria-label="Feeling bad">
+                <img src="/static/images/emoji-bad.png" alt="Emoji representing feeling bad">
+                <p>bad</p>
+            </div>
+            <div class="mood-emoji" data-mood="awful" role="button" aria-label="Feeling awful">
+                <img src="/static/images/emoji-awful.png" alt="Emoji representing feeling awful">
+                <p>awful</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reflection Form Section -->
+    <div class="reflection-form" id="reflection-form">
+        <h2>Reflect on Your Mood</h2>
+
+        <!-- Display Selected Emoji -->
+        <div class="form-section">
+            <label for="selected-mood">Current Mood:</label>
+            <span id="selected-mood"></span>
+        </div>
+
+        <!-- Trigger Log -->
+        <div class="form-section">
+            <label for="trigger">What triggered these feelings?</label>
+            <textarea id="trigger" rows="4" aria-required="true" placeholder="Write about the events or situations..."></textarea>
+        </div>
+
+        <!-- Contextual Factors -->
+        <div class="form-section">
+            <label for="context">Contextual Factors:</label>
+            <select id="context" aria-required="true">
+                <option value="">Select a trigger...</option>
+                <option value="work">Work Stress</option>
+                <option value="family">Family Issues</option>
+                <option value="social">Social Interactions</option>
+                <!-- Add more options as needed -->
+            </select>
+        </div>
+
+        <!-- Physical Symptoms -->
+        <div class="form-section">
+            <label for="symptoms">Physical Symptoms:</label>
+            <textarea id="symptoms" rows="2" aria-required="true" placeholder="E.g., tension, fatigue, etc."></textarea>
+        </div>
+
+        <button class="submit-btn" onclick="submitForm()">Save Reflection</button>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        &copy; Jijali 2024
+    </div>
+
+    <script>
+        // Update the date and time
+        function updateTime() {
+            const now = new Date();
+            const formattedTime = now.toLocaleString();
+            document.getElementById('current-time').innerText = `Today, ${formattedTime}`;
+        }
+
+        updateTime();
+        setInterval(updateTime, 60000); // Update every minute
+
+        // Show the reflection form after emoji selection
+        document.querySelectorAll('.mood-emoji').forEach(function (emoji) {
+            emoji.addEventListener('click', function () {
+                document.getElementById('reflection-form').style.display = 'block';
+                document.getElementById('selected-mood').innerText = emoji.getAttribute('data-mood');
+            });
+        });
+
+        // Submit reflection form function
+        async function submitForm() {
+            const title = document.getElementById('selected-mood').innerText;
+            const trigger = document.getElementById('trigger').value.trim();
+            const context = document.getElementById('context').value;
+            const symptoms = document.getElementById('symptoms').value.trim();
+
+            if (!title || !trigger || !context || !symptoms) {
+                alert('Please fill in all fields before submitting.');
+                return;
+            }
+
+            const content = {
+                learning_about_self: trigger,
+                handling_stress: context,
+                gratitude: symptoms,
+                improvement: '' // Adjust if needed
+            };
+
+            const data = { 
+                title,
+                content: JSON.stringify(content)  // Serialize content to a JSON string
+            };
+
+            try {
+                const token = localStorage.getItem('access_token'); // Ensure token is available
+
+                const response = await fetch('/moods/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`  // Ensure token is included
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.status === 401) {
+                    alert('Session expired or not authenticated. Please log in again.');
+                    window.location.href = '/login'; // Redirect to login page
+                } else if (response.ok) {
+                    const result = await response.json();
+                    alert('Mood reflection saved successfully!');
+                    window.location.href = '/dashboard'; // Redirect to entries page
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.detail || 'Failed to save reflection'}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An unexpected error occurred');
+            }
+        }
+
+        // Token validity check
+        async function checkTokenValidity() {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                window.location.href = '/login'; // Redirect to login page
+                return;
+            }
+
+            try {
+                const response = await fetch('/verify-token', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.status === 401) {
+                    window.location.href = '/login'; // Redirect to login page if token is invalid
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while checking token validity');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateTime();
+            checkTokenValidity(); // Check token validity when the page loads
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

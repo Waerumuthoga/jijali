@@ -46,7 +46,7 @@
             max-width: 400px;
         }
         .input-container input {
-            width: 80%;
+            width: 100%;
             padding: 10px;
             margin-bottom: 15px;
             border-radius: 25px;
@@ -60,7 +60,7 @@
         }
         .input-icon {
             position: relative;
-            width: 80%;
+            width: 100%;
             margin-bottom: 15px;
         }
         .input-icon img {
@@ -75,7 +75,7 @@
             padding-left: 50px;
         }
         .login-button {
-            width: 80;
+            width: 100%;
             padding: 10px;
             border: none;
             border-radius: 25px;
@@ -97,7 +97,10 @@
         .register-link {
             margin-top: 20px;
             color: var(--prussian-blue);
-            cursor: pointer;
+        }
+        .register-link a {
+            color: var(--prussian-blue);
+            text-decoration: none;
         }
         .register-link a:hover {
             text-decoration: underline;
@@ -109,41 +112,76 @@
     </style>
 </head>
 <body>
-    
     <div class="container">
         <div class="illustration">
-            <img src="/static/images/illustration.png" alt="illustration of someone unwinding">
+            <img src="/static/images/illustration.png" alt="Illustration of someone unwinding">
         </div>
 
         <div class="welcome-text">Welcome</div>
 
-        <form action="/login" method="POST">
+        <form id="loginForm">
             <div class="input-container">
-                <!-- <div class="input-icon">
-                    <img src="/static/images/user-icon.png" alt="User Icon">
-                    <input type="text" name="username" placeholder="Username">
-                </div> -->
-
                 <div class="input-icon">
-                    <img src="/static/images/email-icon.png" alt="Email Icon">
-                    <input type="text" name="email" placeholder="Email">
+                    <img src="/static/images/user-icon.png" alt="User Icon">
+                    <input type="text" id="username" name="username" placeholder="Email" required>
                 </div>
-
                 <div class="input-icon">
                     <img src="/static/images/lock-icon.png" alt="Lock Icon">
-                    <input type="password" name="password" placeholder="Password">
+                    <input type="password" id="password" name="password" placeholder="Password" required>
                 </div>
             </div>
 
-            <button class="login-button">Log in</button>
+            <button type="submit" class="login-button">Log in</button>
         </form>
 
-        <div class="forgot-password">Forgot Password</div>
+        <div class="forgot-password">
+            <a href="/password_reset">Forgot Password</a>
+        </div>
 
         <div class="register-link">
             <p>Don't Have an Account? <a href="/users/register">Register</a></p>
         </div>
     </div>
 
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent the default form submission
+
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData);
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(data),
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    alert('Login successful!'); // Show success message
+
+                    // Store the access token if needed
+                    localStorage.setItem('access_token', result.access_token);
+                    
+                    // Redirect to the dashboard
+                    window.location.href = '/dashboard'; 
+                } else {
+                    const error = await response.json();
+                    alert(`Error: ${error.detail}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An unexpected error occurred.');
+            }
+        });
+    </script>
 </body>
 </html>
+
+
+
+
+

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Stats</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #00171F;
+            color: #ADEBFF;
+        }
+
+        .header {
+            text-align: center;
+            padding: 10px;
+            background-color: #003459;
+        }
+
+        .header img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .header p {
+            font-size: 1rem;
+            margin: 5px 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #003459;
+            border-radius: 8px;
+        }
+
+        h1 {
+            color: #ADEBFF;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 400px;
+        }
+
+        .back-button {
+            background-color: #003459;
+            color: #ADEBFF;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 20px auto;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .back-button:hover {
+            background-color: #00171F;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #003459;
+            color: #ADEBFF;
+            font-size: 14px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .header img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .back-button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header with Logo and Time -->
+    <div class="header">
+        <img src="/static/images/logo.png" alt="App Logo">
+        <p id="current-time"></p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1>Mood Stats</h1>
+        <a href="/dashboard" class="back-button">Back to Dashboard</a>
+        <div class="chart-container">
+            <canvas id="moodChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        &copy; Jijali 2024
+    </div>
+
+    <script>
+        // Function to format the time to the desired format
+        function formatTime(date) {
+            const months = ["January", "February", "March", "April", "May", "June", 
+                             "July", "August", "September", "October", "November", "December"];
+            const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+            const month = date.getMonth() + 1; // Months are zero-based
+            const dateOfMonth = date.getDate();
+            const year = date.getFullYear();
+            
+            let hours = date.getHours();
+            let minutes = date.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+
+            hours = hours % 12;
+            hours = hours ? hours : 12; // Hour '0' should be '12'
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+
+            return `Today, ${month}/${dateOfMonth}/${year}, ${hours}:${minutes} ${ampm}`;
+        }
+
+        // Update the date and time
+        function updateTime() {
+            const now = new Date();
+            const formattedTime = formatTime(now);
+            document.getElementById('current-time').innerText = formattedTime;
+        }
+
+        updateTime();
+        setInterval(updateTime, 60000); // Update every minute
+
+        async function fetchMoodData() {
+            const token = localStorage.getItem('access_token'); // Assuming token is stored in localStorage
+            if (!token) {
+                alert('No token found. Please log in.');
+                window.location.href = '/login'; // Redirect to login if no token
+                return { rad: 0, good: 0, meh: 0, bad: 0, awful: 0 };
+            }
+
+            try {
+                const response = await fetch('/stats/mood-chart', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        alert('Unauthorized access. Please log in again.');
+                        window.location.href = '/login'; // Redirect to login if unauthorized
+                    } else {
+                        console.error('Network response was not ok:', response.statusText);
+                        alert('Failed to fetch mood data.');
+                    }
+                    return { rad: 0, good: 0, meh: 0, bad: 0, awful: 0 }; // Return default data
+                }
+                
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Failed to fetch mood data:', error);
+                return { rad: 0, good: 0, meh: 0, bad: 0, awful: 0 }; // Return default data
+            }
+        }
+
+        async function generateMoodChart() {
+            const moodData = await fetchMoodData();
+            
+            const ctx = document.getElementById('moodChart').getContext('2d');
+
+            // Custom plugin to draw emojis
+            Chart.register({
+                id: 'emojiPlugin',
+                afterDatasetsDraw: function(chart) {
+                    const ctx = chart.ctx;
+                    const chartArea = chart.chartArea;
+                    const chartWidth = chart.width;
+                    const chartHeight = chart.height;
+
+                    const emojiImages = {
+                        rad: '/static/images/emoji-rad.png',
+                        good: '/static/images/emoji-good.png',
+                        meh: '/static/images/emoji-meh.png',
+                        bad: '/static/images/emoji-bad.png',
+                        awful: '/static/images/emoji-awful.png'
+                    };
+
+                    chart.data.labels.forEach((label, index) => {
+                        const value = chart.data.datasets[0].data[index];
+                        const x = chart.getDatasetMeta(0).data[index].x;
+                        const y = chart.getDatasetMeta(0).data[index].y;
+
+                        if (value > 0) {
+                            const img = new Image();
+                            img.src = emojiImages[label.toLowerCase()];
+                            img.onload = () => {
+                                ctx.drawImage(img, x - 20, y - 40, 40, 40); // Adjust size and position as needed
+                            };
+                        }
+                    });
+                }
+            });
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Rad', 'Good', 'Meh', 'Bad', 'Awful'],
+                    datasets: [{
+                        label: '# of Moods',
+                        data: [moodData.rad, moodData.good, moodData.meh, moodData.bad, moodData.awful],
+                        backgroundColor: ['#00FF00', '#00FF00', '#00FFFF', '#FF4500', '#FF0000'], // Customize colors
+                        borderColor: '#000000',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true, // Make the chart responsive
+                    maintainAspectRatio: false, // Allow chart to resize
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize chart
+        generateMoodChart();
+    </script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+

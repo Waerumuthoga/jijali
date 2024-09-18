@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, ConfigDict
+from pydantic import BaseModel, EmailStr, ConfigDict, validator
 from datetime import datetime
 from typing import Optional
 
@@ -56,6 +56,13 @@ class UserCreate(BaseModel):
     email: EmailStr
     username: str
     password: str
+    confirm_password: str
+
+    @validator('confirm_password')
+    def passwords_match(cls, v, values):
+        if 'password' in values and values['password'] != v:
+            raise ValueError('Passwords do not match')
+        return v
 
 
 
@@ -69,3 +76,6 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     id: Optional[str] = None
+
+class PasswordReset(BaseModel):
+    pass

@@ -16,7 +16,7 @@ def get_journals(db: Session = Depends(get_db), current_user: int = Depends(oath
     journals = db.query(models.Journal).filter(models.Journal.owner_id == current_user.id).filter(models.Journal.title.contains(search)).limit(limit).offset(skip).all()
     return journals
 
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.Journal)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.Journal, responses={401: {"description": "Not authenticated (authentication required)"}})
 def create_journals(journal: schemas.JournalCreate, db: Session = Depends(get_db), current_user: int = Depends(oath2.get_current_user)):
 
     print(current_user.email)
