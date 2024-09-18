@@ -10,7 +10,7 @@ from fastapi.responses import HTMLResponse
 from .oath2 import get_current_user
 from .schemas import TokenData
 
-print(settings.database_hostname)
+# print(settings.database_hostname)
 
 # models.Base.metadata.create_all(bind=engine)
 
