@@ -1,4 +1,4 @@
-# Jijali - Mental Health Web Applicatio
+# Jijali - Mental Health Web Application
 ---
 ## Project Overview
 *Jijali* is a mental health web application designed to help users manage their mental well-being through journaling, mood tracking, and graphical analysis. The app provides a platform where users can log their daily emotions, reflect on triggers, and monitor their mental health journey.
