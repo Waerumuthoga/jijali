@@ -12,7 +12,7 @@ You can access the live application [here](http://34.46.72.53/).
 
 ### Final Project Blog Article
 
-Read more about the development process in my blog [here](link-to-blog-article).
+Read more about the development process in my blog [here](https://www.linkedin.com/posts/jeremymuthoga_enhancing-mental-well-being-through-reflective-activity-7244420350346752000-9Jhi?utm_source=share&utm_medium=member_ios).
 
 ## Features
 
