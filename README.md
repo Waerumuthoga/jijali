@@ -61,7 +61,7 @@ Contributions are welcome! If you have suggestions for improvements or want to a
 5. Open a pull request.
 
 **Licensing**
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE] file for details.
 
 Thank you for checking out Jijali! Your mental well-being matters.
 
